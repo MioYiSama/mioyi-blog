@@ -1,5 +1,7 @@
 ---
 title: Hello, world!
+tags: [misc]
+weight: 0
 ---
 
 $$
