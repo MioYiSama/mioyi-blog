@@ -1,3 +1,5 @@
+baseURL: "https://www.mioyi.net/"
+
 defaultContentLanguage: en
 languages:
   en:
@@ -41,18 +43,18 @@ menu:
       name: Tags
       pageRef: /tags
       weight: 2
-    - name: Theme Toggle
+    - name: Search
       weight: 3
       params:
-        type: theme-toggle
-    - name: 语言切换器
+        type: search
+    - name: Theme Toggle
       weight: 4
       params:
-        type: language-switch
-    - name: Search
+        type: theme-toggle
+    - name: Language Switch
       weight: 5
       params:
-        type: search
+        type: language-switch
     - name: GitHub
       weight: 6
       url: "https://github.com/MioYiSama/mioyi-blog"
@@ -87,3 +89,5 @@ params:
 
 outputs:
   page: [html, markdown]
+minify:
+  minifyOutput: true
