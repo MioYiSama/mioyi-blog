@@ -27,7 +27,6 @@ markup:
         delimiters:
           inline: [["$", "$"]]
           block: [['\[', '\]'], ["$$", "$$"]]
-
   highlight:
     noClasses: false
     lineNos: true
@@ -62,29 +61,29 @@ menu:
 
 enableGitInfo: true
 params:
-  externalLinkDecoration: true
   displayUpdatedDate: true
   enableInlineShortcodes: true
-  navbar:
-    displayTitle: true
-    displayLogo: false
-
-  footer:
-    displayCopyright: true
-    displayPoweredBy: true
+  externalLinkDecoration: true
 
   math:
     engine: mathjax
+  toc:
+    displayTags: true
+  imageZoom:
+    enable: true
+
+  navbar:
+    displayTitle: true
+    displayLogo: false
+  footer:
+    displayCopyright: true
+    displayPoweredBy: true
   page:
     contextMenu:
       enable: true
   blog:
     list:
       displayTags: true
-  toc:
-    displayTags: true
-  imageZoom:
-    enable: true
 
 outputs:
   page: [html, markdown]

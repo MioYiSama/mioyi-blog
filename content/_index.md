@@ -25,5 +25,5 @@ toc: false
 </div>
 
 {{< cards cols="1" >}}
-{{< card link="/blog" title="查看博客" image="/bg.svg" icon="document-text" >}}
+{{< card link="/blog" title="Read Blogs" image="/bg.svg" icon="document-text" >}}
 {{< /cards >}}
