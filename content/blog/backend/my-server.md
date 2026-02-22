@@ -1,6 +1,6 @@
 ---
 title: Some Insights into Playing with Servers
-tags: [Server]
+tags: [backend]
 weight: -1
 ---
 
