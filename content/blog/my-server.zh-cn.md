@@ -6,25 +6,28 @@ weight: -1
 
 ## 服务器选择
 
-- Cloud Provider：国外的基本得要信用卡，可以直接Pass。国内阿里云份额最大，但是对于普通人来说区别不大，可以看价格下菜，但是选冷门云厂商要慎重。
-- CPU：至少两个核心，一个核心运维都难，服务和你的ssh抢饭吃。
-- 内存：至少2GB，4GB是舒适区。如果没有Java服务还行，一旦有Java就洗洗睡吧。内存少的服务器只能用go和rust，jvm和node的服务完全用不了。只要自己亲自部署过服务的就知道go有多香了，jvm根本不敢用。
-- 网络：不怕DDoS可以选择流量计费，否则还是带宽吧。（我目前选的是流量）
-- 地域：目前来看香港还是最优解，不仅不用备案，还能直接docker pull镜像、git clone等等，甚至还能搞proxy。
+- 云厂商：国外的基本得要信用卡，可以直接Pass。国内阿里云份额最大，但是不同大厂的云服务对于普通人来说区别不大，可以看价格下菜，但是选小厂的要慎重。
+- CPU：至少两个核心。一个核心运维都难，服务和你的ssh、vscode server抢饭吃。
+- 内存：至少2GB；4GB是舒适区。如果没有Java服务还行，一旦有Java就洗洗睡吧。内存少的服务器只能用go和rust，jvm和node的服务完全用不了。只要自己亲自部署过服务的就知道go有多香了，jvm根本不敢用。
+- 网络：确信流量不大或是不怕DDoS的可以选择流量计费，否则选择带宽。
+- 地域：目前来看香港还是最优解，不仅不用备案，而且访问Docker Hub、GitHub、Huggingface等不需要代理，甚至还能搞proxy server。
 
 ## 操作系统选择
 
-服务器端不是Debian系就是RHEL系。免费的里面Debian和AlmaLinux最为突出（RockyLinux的作者风评不好）。喜欢RHEL（保守派）的选AlmaLinux，但是dnf管理器更新软件包比apt慢得多，有时候还要看红帽脸色。Debian在生态和轻量上更有优势，Docker都选择了debian作为hardened image。
+服务器端不是Debian系就是RHEL系。
 
-> （实际上CentOS Stream不是不能用，只是给人们带来的心理落差太大了，就看起来很危险。它甚至还能比RHEL更早拿到安全补丁，而且上游还有Fedora兜底）
+免费的里面Debian和AlmaLinux最为突出（RockyLinux的作者风评不好）。喜欢RHEL（保守派）的选AlmaLinux，但是dnf管理器更新软件包比apt慢得多，有时候软件包更新还要看红帽脸色。Debian在生态上优势极为明显，Docker都选择了debian作为Docker Hardened Image。
+
+> [!NOTE]
+> 实际上CentOS Stream不是不能用，只是给人们带来的心理落差太大了，就让人感觉很危险。如果对安全没有特别严重的洁癖，担心这个不如担心其他地方的安全措施有没有做好。实际上它甚至还能比RHEL更早拿到安全补丁，而且上游还有Fedora兜底
 
 ## 准备工作
 
 ### ssh
 
 不建议用密码，建议用密钥。sshd_config里启用公钥登录，还可以顺带禁用密码登录。
-。
-最佳的公私钥算法是ed25519，因此可以用`ssh-keygen -t ed25519`生成。剩下的操作就略过了，教程极其多。
+
+最佳的公私钥算法是ed25519（可以用`ssh-keygen -t ed25519`生成）。剩下的操作就略过了，教程极其多。
 
 ### Docker
 
@@ -32,11 +35,13 @@ Docker的优点不只是reproducible。服务的配置文件、生命周期、�
 
 安装方式官方文档写得很详细：<https://docs.docker.com/engine/install/>
 
-如果默认不是root用户，可以考虑把普通用户加入docker组（操作略，自己搜教程）
+如果默认不是root用户，可以考虑把普通用户加入docker组。
 
 ### 使用docker
 
-不管是一个服务还是多个服务，建议全都使用Docker Compose配置。命令行的局限性太大。可以专门搞文件夹整理配置文件：
+不管是一个服务还是多个服务，建议全都使用Docker Compose配置。命令行的局限性太大，配置文件更好维护。
+
+可以像我一样专门搞一个文件夹整理配置文件：
 
 {{< filetree/container >}}
 {{< filetree/folder name="docker" >}}
@@ -73,10 +78,10 @@ Docker的优点不只是reproducible。服务的配置文件、生命周期、�
 
 具体配置举例：
 
-- 能写清楚major版本号的写清楚，便于无缝更新；不能的先看看有没有stable等版本，最后选择latest。后续不要轻易更新服务，不然很可能导致服务崩溃，甚至产生连锁反应，因此我没有写 `pull_policy: always`。严格遵循SemVer的可以大胆更新。
-- 建议使用env file，不要直接把环境变量写在compose文件里
-- 配置文件统一用本地目录挂载；否则尽量使用docker的volume管理。（本地目录其实是可以直接访问到volume里的文件的）
-- 尽可能使用桥接网络+docker自带的ip解析功能（容器名自动解析为具体ip）。生产者创建一个独立的桥接网络，消费者加入生产者的网络后使用容器名访问。除了反向代理服务之外尽可能避免暴露端口到宿主机。
+- 能写清楚major版本号的写清楚，便于无缝更新；不能的先看看有没有stable等版本，最后选择latest。后续不要轻易更新服务，不然很可能导致服务崩溃（如果是升级底层服务还会产生连锁反应，把其他服务搞崩溃）。因此我没有写 `pull_policy: always`。严格遵循SemVer的可以大胆更新。
+- 建议使用 `.env`，不要直接把环境变量写在compose文件里
+- 配置文件统一用本地目录挂载；否则尽量使用docker的volume管理。可以通过 `docker volume inspect <id>` 查看宿主机实际的存储路径。
+- 尽可能使用桥接网络和docker自带的ip解析功能（容器名自动解析为具体ip）。虽然host模式很方便，但是容器端口很容易冲突，而且如果防火墙配置不当很危险。生产者创建一个独立的桥接网络，消费者加入生产者的网络后使用容器名访问。所以除了反向代理服务之外尽可能避免暴露端口到宿主机。
 
 ```yml {filename="docker-compose.yml"}
 services:
@@ -232,10 +237,9 @@ create database casdoor with owner casdoor;
 - RustFS：新星，使用体验不错，但是有很多负面评价，成熟度不够
 - Ceph：分布式存储。（我暂未尝试过）
 
-目前我的选择是SeaweedFS，除了部署稍微麻烦一点全是优点。
+目前我的选择是SeaweedFS。DockerCompose配置文件：
 
-DockerCompose配置文件：
-
+> [!NOTE]
 > WebDAV是可选项，可以套一个OpenList（AList后继）作为前端管理文件
 
 ```yml {filename="docker-compose.yml"}
@@ -344,6 +348,7 @@ volumes:
 
 S3配置文件：
 
+> [!NOTE]
 > 既可以配置anonymous权限，也支持细分到具体操作和Bucket的权限。
 
 ```json {filename="s3.config.json"}
@@ -386,6 +391,9 @@ S3配置文件：
   ]
 }
 ```
+
+> [!NOTE]
+> SeaweedFS主要是为了分布式+大量小文件存储设计的，因此在volume的创建上非常激进，会创建大量并发写和容灾副本，对于硬盘小的个人服务器来说非常紧张。配置为`-defaultReplication=000 -volumeSizeLimitMB=1024`后可以一定程度上解决空间紧张问题。但是bucket不要创建太多，因为一个bucket就对应一个collection，SeaweedFS还会预分配容量。
 
 ### 身份认证
 
