@@ -54,19 +54,19 @@ menu:
       weight: 3
       params:
         type: search
-    - name: Theme Toggle
+    - name: Language Switch
       weight: 4
       params:
-        type: theme-toggle
-    - name: Language Switch
+        type: language-switch
+    - name: Theme Toggle
       weight: 5
       params:
-        type: language-switch
-    - name: GitHub
-      weight: 6
-      url: "https://github.com/MioYiSama/mioyi-blog"
-      params:
-        icon: github
+        type: theme-toggle
+    # - name: GitHub
+    #   weight: 10
+    #   url: "https://github.com/MioYiSama/mioyi-blog"
+    #   params:
+    #     icon: github
 
 enableGitInfo: true
 params:
