@@ -12,7 +12,7 @@ toc: false
     "
 >
     <img
-    src="/avatar.jpeg"
+    src="/avatar.webp"
     alt="avatar"
     style="width: 8rem; height: 8rem; display: block; border-radius: 50%"
     />

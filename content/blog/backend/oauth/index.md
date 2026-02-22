@@ -54,18 +54,18 @@ The Authentication Server handles everything: username/password auth, third-part
 > \[!NOTE]
 > My solution does not use any specific auth libraries; it is entirely based on HTTP and OIDC protocols, making migration to other languages very easy. The backend only needs to support middleware/interceptors. Even with Java + Spring Boot, the code totals less than 200 lines.
 
-![image.png](image.png)
+![image.webp](image.webp)
 
 Finished Product Screenshots:
 
 - Regular User (can edit own profile)
 
-![image.png](image1.png)
+![image.webp](image1.webp)
 
 - Admin (can manage users, tokens, registration, and many other features)
-  ![image.png](image2.png)
+  ![image.webp](image2.webp)
 - Permission Management
-  ![image.png](image3.png)
+  ![image.webp](image3.webp)
 
 ### Implementation
 
@@ -133,45 +133,45 @@ Finished Product Screenshots:
 
 3. Create an Organization (optional) and remember the organization name (ID). (Details omitted; configure based on your needs).
 
-   ![image.png](image4.png)
+   ![image.webp](image4.webp)
 
 4. Create Users under this organization.
 
-   ![image.png](image5.png)
+   ![image.webp](image5.webp)
 
-   ![image.png](image6.png)
+   ![image.webp](image6.webp)
 
 5. Create an Application.
 
-   ![image.png](image7.png)
+   ![image.webp](image7.webp)
 
    Enter a name for the application (record this).
 
-   ![image.png](image8.png)
+   ![image.webp](image8.webp)
 
    Select the organization created earlier.
 
-   ![image.png](image9.png)
+   ![image.webp](image9.webp)
 
    Fill in the (frontend) redirect URL (refer to the previous workflow) and record the ID and Secret. In 3️⃣, select `JWT-Custom`; in 4️⃣, select `Owner` and `Name` (used for subsequent permission verification).
 
-   ![image.png](image10.png)
+   ![image.webp](image10.webp)
 
    Since we let Casdoor fully manage user information, it is recommended to enable this option so that logging into the app also logs you into Casdoor. Explore other configurations as needed.
 
-   ![image.png](image11.png)
+   ![image.webp](image11.webp)
 
 6. Add Roles (usually `admin` and `user` are enough) and assign users to roles. Roles can also inherit from each other; for example, if VIPs also have admin rights, you can configure the `vip` role to inherit the `admin` role.
 
-   ![image.png](image12.png)
+   ![image.webp](image12.webp)
 
-   ![image.png](image13.png)
+   ![image.webp](image13.webp)
 
 7. Set up the Casbin model—you can copy this directly:
 
-   ![image.png](image14.png)
+   ![image.webp](image14.webp)
 
-   ![image.png](image15.png)
+   ![image.webp](image15.webp)
 
    ```
    [request_definition]
@@ -192,17 +192,17 @@ Finished Product Screenshots:
 
 8. Add permissions as required.
 
-   ![image.png](image16.png)
+   ![image.webp](image16.webp)
 
    Follow the example in the image (Resources and Actions can use wildcard `*`; Resources can also use path param wildcards like `/api/user/{id}`, see <https://www.casbin.org/docs/function>).
 
-   ![image.png](image17.png)
+   ![image.webp](image17.webp)
 
 9. Download the JWT Public Key for verification.
 
-   ![image.png](image18.png)
+   ![image.webp](image18.webp)
 
-   ![image.png](image19.png)
+   ![image.webp](image19.webp)
 
 #### Backend Configuration
 
@@ -551,15 +551,15 @@ Finished Product Screenshots:
 
 1. Massive support for third-party logins (practically anything OAuth-compatible).
 
-   ![image.png](image20.png)
+   ![image.webp](image20.webp)
 
 2. Convenient SaaS features (Invitation codes, verification codes, payments, etc.).
 
-![image.png](image21.png)
+![image.webp](image21.webp)
 
-![image.png](image22.png)
+![image.webp](image22.webp)
 
-![image.png](image23.png)
+![image.webp](image23.webp)
 
 1. Observability (Logs, auditing, system monitoring).
 2. Written in Golang for high performance.
@@ -572,33 +572,33 @@ Assuming the previous steps are completed:
 
 1. Modify JWT Claims. We need to include Group info for group authentication.
 
-   ![image.png](image24.png)
+   ![image.webp](image24.webp)
 
 2. Add some groups and assign users to them. Example: `admin_group` and `vip_group`.
 
-   ![image.png](image25.png)
+   ![image.webp](image25.webp)
 
-   ![image.png](image26.png)
+   ![image.webp](image26.webp)
 
 3. The Casbin model remains the same, but we create a Casbin Adapter to store the policy.
 
-   ![image.png](image27.png)
+   ![image.webp](image27.webp)
 
    You must click "Test DB Connection" for Casbin to create the database tables.
 
-   ![image.png](image28.png)
+   ![image.webp](image28.webp)
 
 4. Add a Casbin Enforcer.
 
-   ![image.png](image29.png)
+   ![image.webp](image29.webp)
 
    Select the model and adapter, click Save, then click Sync.
 
-   ![image.png](image30.png)
+   ![image.webp](image30.webp)
 
 5. Add policies to the Casbin Enforcer. Policy types are `p` (enforce policy) and `g` (role definition). `g x y` means `x` inherits all permissions of `y`. See <https://www.casbin.org/docs/rbac>.
 
-   ![image.png](image31.png)
+   ![image.webp](image31.webp)
 
 6. Update the backend JWT claims definition (to get groups from the JWT).
 

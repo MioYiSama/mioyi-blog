@@ -59,18 +59,18 @@ weight: -3
 > [!NOTE]
 > 我的方案没有使用任何认证授权库，全都是基于HTTP和OIDC协议进行，迁移到别的语言非常方便。后端只要支持中间件/拦截器即可。即使使用Java+SpringBoot, 加起来也不超过200行代码
 
-![image.png](image.png)
+![image.webp](image.webp)
 
 成品图
 
 - 普通用户（可以编辑自己的用户信息）
 
-![image.png](image1.png)
+![image.webp](image1.webp)
 
 - 管理员（可以管理用户信息、令牌、注册用户等大量功能）
-  ![image.png](image2.png)
+  ![image.webp](image2.webp)
 - 权限管理
-  ![image.png](image3.png)
+  ![image.webp](image3.webp)
 
 ### 具体操作
 
@@ -136,45 +136,45 @@ weight: -3
 2. 访问 `localhost:8000` ，用账号`admin`、密码`123`登录
 3. 创建组织（可选），并记住组织的名称（ID）（具体配置略，按照自己需求配置）
 
-   ![image.png](image4.png)
+   ![image.webp](image4.webp)
 
 4. 在该组织下创建用户（配置略）
 
-   ![image.png](image5.png)
+   ![image.webp](image5.webp)
 
-   ![image.png](image6.png)
+   ![image.webp](image6.webp)
 
 5. 创建应用
 
-   ![image.png](image7.png)
+   ![image.webp](image7.webp)
 
    为应用填写一个名称（请记录）
 
-   ![image.png](image8.png)
+   ![image.webp](image8.webp)
 
    选择刚才创建的组织
 
-   ![image.png](image9.png)
+   ![image.webp](image9.webp)
 
    填写2️⃣中的（前端）重定向URL（参照前面的流程），并记录ID和密钥。3️⃣选择JWT-Custom，4️⃣选择Owner和Name（用于后续权限认证）。
 
-   ![image.png](image10.png)
+   ![image.webp](image10.webp)
 
    由于我们让Casdoor全权负责用户信息，因此建议启用这个选项，这样登录应用的同时也会登录casdoor。剩余配置请自行探索。
 
-   ![image.png](image11.png)
+   ![image.webp](image11.webp)
 
 6. 添加角色（一般admin和user就够用了），并为角色添加用户。角色之间也可以互相包含，比如会员当中也包含了管理员，就可以设置vip包含admin角色
 
-   ![image.png](image12.png)
+   ![image.webp](image12.webp)
 
-   ![image.png](image13.png)
+   ![image.webp](image13.webp)
 
 7. 设置casbin模型，直接照抄即可
 
-   ![image.png](image14.png)
+   ![image.webp](image14.webp)
 
-   ![image.png](image15.png)
+   ![image.webp](image15.webp)
 
    ```
    [request_definition]
@@ -195,17 +195,17 @@ weight: -3
 
 8. 按需求添加权限
 
-   ![image.png](image16.png)
+   ![image.webp](image16.webp)
 
    按照图片的例子进行配置（资源、动作可以使用通配符`*` ；资源也可以使用path param的通配符，比如`/api/user/{id}`，可以参考[https://www.casbin.org/docs/function](https://www.casbin.org/docs/function)）
 
-   ![image.png](image17.png)
+   ![image.webp](image17.webp)
 
 9. 下载JWT公钥用于JWT校验
 
-   ![image.png](image18.png)
+   ![image.webp](image18.webp)
 
-   ![image.png](image19.png)
+   ![image.webp](image19.webp)
 
 #### 配置后端
 
@@ -554,15 +554,15 @@ weight: -3
 
 1. 极其大量的第三方登录支持（实际上只要支持了OAuth协议，大差不差）
 
-   ![image.png](image20.png)
+   ![image.webp](image20.webp)
 
 2. SaaS便捷功能（邀请码、校验码、支付等）
 
-![image.png](image21.png)
+![image.webp](image21.webp)
 
-![image.png](image22.png)
+![image.webp](image22.webp)
 
-![image.png](image23.png)
+![image.webp](image23.webp)
 
 1. 可观测性（日志、审计、系统信息监控）
 2. golang编写，性能优越
@@ -575,33 +575,33 @@ weight: -3
 
 1. 修改JWT携带的信息。由于我们要用群组认证，所以要携带Groups信息
 
-   ![image.png](image24.png)
+   ![image.webp](image24.webp)
 
 2. 自行添加几个群组，并修改用户的群组。这里以admin_group和vip_group群组为例
 
-   ![image.png](image25.png)
+   ![image.webp](image25.webp)
 
-   ![image.png](image26.png)
+   ![image.webp](image26.webp)
 
 3. casbin模型不用变，但是我们要创建一个casbin适配器，用来填写授权的policy
 
-   ![image.png](image27.png)
+   ![image.webp](image27.webp)
 
    必须点击“Test DB Connection”，casbin才会创建数据表
 
-   ![image.png](image28.png)
+   ![image.webp](image28.webp)
 
 4. 添加casbin执行器
 
-   ![image.png](image29.png)
+   ![image.webp](image29.webp)
 
    选好模型和适配器后，先点一下保存，然后点同步
 
-   ![image.png](image30.png)
+   ![image.webp](image30.webp)
 
 5. 往casbin执行器中添加策略。策略类型分为p（enforce的策略）和g（role的定义）。`g x y` 的意思是x继承y的所有权限，比如admin继承vip权限。具体请参考[https://www.casbin.org/docs/rbac](https://www.casbin.org/docs/rbac)
 
-   ![image.png](image31.png)
+   ![image.webp](image31.webp)
 
 6. 修改后端代码中jwt claims的定义（现在我们要从JWT中获取group信息）
 
