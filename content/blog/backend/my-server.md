@@ -391,8 +391,10 @@ S3 configuration file:
 }
 ```
 
-> \[!NOTE]
-> SeaweedFS is mainly designed for distributed storage + a massive amount of small files, so it is very aggressive in volume creation, creating a lot of concurrent writes and disaster recovery replicas. This is very tight for personal servers with small hard drives. Configuring it with `-defaultReplication=000 -volumeSizeLimitMB=1024` can solve the space crunch to some extent. However, don't create too many buckets, because one bucket corresponds to one collection, and SeaweedFS will pre-allocate capacity.
+> [!NOTE]
+> SeaweedFS is primarily designed for distributed storage and handling a large number of small files. Therefore, it is very aggressive in volume creation, generating numerous concurrent writes and disaster recovery replicas, along with pre-allocation. This can be very taxing for personal servers with small hard drives. Consequently, the master must be configured with `-defaultReplication=000 -volumeSizeLimitMB=64`, and the volume container must also be configured with `-max=0` to allow it to automatically expand without limits.
+>
+> Refer to <https://github.com/seaweedfs/seaweedfs/wiki/Replication> <https://github.com/seaweedfs/seaweedfs/wiki/Optimization>
 
 ### Identity Authentication
 

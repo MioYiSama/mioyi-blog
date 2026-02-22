@@ -250,7 +250,7 @@ services:
 
     container_name: seaweedfs-master
     restart: unless-stopped
-    command: master -ip=seaweedfs-master -ip.bind=0.0.0.0 -defaultReplication=000 -volumeSizeLimitMB=1024
+    command: master -ip=seaweedfs-master -ip.bind=0.0.0.0 -defaultReplication=000 -volumeSizeLimitMB=64
 
     networks:
       - seaweedfs
@@ -392,7 +392,9 @@ S3配置文件：
 ```
 
 > [!NOTE]
-> SeaweedFS主要是为了分布式+大量小文件存储设计的，因此在volume的创建上非常激进，会创建大量并发写和容灾副本，对于硬盘小的个人服务器来说非常紧张。配置为`-defaultReplication=000 -volumeSizeLimitMB=1024`后可以一定程度上解决空间紧张问题。但是bucket不要创建太多，因为一个bucket就对应一个collection，SeaweedFS还会预分配容量。
+> SeaweedFS主要是为了分布式+大量小文件存储设计的，因此在volume的创建上非常激进，会创建大量并发写和容灾副本，还会预分配，对于硬盘小的个人服务器来说非常紧张。因此master必须配置 `-defaultReplication=000 -volumeSizeLimitMB=64`，同时volume容器也要配置`-max=0`，让它能够自动无限制扩容。
+>
+> 参阅 <https://github.com/seaweedfs/seaweedfs/wiki/Replication> <https://github.com/seaweedfs/seaweedfs/wiki/Optimization>
 
 ### 身份认证
 
