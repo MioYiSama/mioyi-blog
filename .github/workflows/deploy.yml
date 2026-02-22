@@ -31,14 +31,13 @@ jobs:
           HUGO_ENV: production
           HUGO_ENVIRONMENT: production
 
-      - name: Deploy via SFTP
-        uses: appleboy/scp-action@v1
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@v8
         with:
-          host: ${{ secrets.SSH_HOST }}
-          port: 22
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          source: public/*
-          target: /var/www/blog
-          strip_components: 1
-          rm: true
+          switches: -avzr --delete
+          path: public/
+          remote_path: /var/www/blog 
+          remote_host: ${{ secrets.SSH_HOST }} 
+          remote_port: 22 
+          remote_user: ${{ secrets.SSH_USER }} 
+          remote_key: ${{ secrets.SSH_KEY }}
