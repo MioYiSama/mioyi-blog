@@ -31,10 +31,10 @@ jobs:
           HUGO_ENV: production
           HUGO_ENVIRONMENT: production
 
-      - name: rsync deployments
+      - name: Deploy via rsync
         uses: burnett01/rsync-deployments@v8
         with:
-          switches: -avzr --delete
+          switches: -avzr --delete --exclude='.git'
           path: public/
           remote_path: /var/www/blog 
           remote_host: ${{ secrets.SSH_HOST }} 
