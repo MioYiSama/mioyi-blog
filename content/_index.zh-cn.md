@@ -4,6 +4,7 @@ toc: false
 
 <div
     style="
+    height: 60dvh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -24,6 +25,7 @@ toc: false
     </div>
 </div>
 
-{{< cards cols="1" >}}
-{{< card link="/zh-cn/blog" title="查看博客" image="/bg.svg" icon="document-text" >}}
+{{< cards cols="2" >}}
+{{< card link="/zh-cn/blog" title="阅读博客" icon="blog" >}}
+{{< card link="/zh-cn/tags" title="博客分类" icon="tag" >}}
 {{< /cards >}}

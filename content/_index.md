@@ -4,6 +4,7 @@ toc: false
 
 <div
     style="
+    height: 60dvh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -24,6 +25,7 @@ toc: false
     </div>
 </div>
 
-{{< cards cols="1" >}}
-{{< card link="/blog" title="Read Blogs" image="/bg.svg" icon="document-text" >}}
+{{< cards cols="2" >}}
+{{< card link="/blog" title="Read Blogs" icon="blog" >}}
+{{< card link="/blog" title="Blogs by Tags" icon="tag" >}}
 {{< /cards >}}

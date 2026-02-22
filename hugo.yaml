@@ -39,10 +39,16 @@ menu:
       name: Blog
       pageRef: /blog
       weight: 1
+      params:
+        type: link
+        icon: blog
     - identifier: tags
       name: Tags
       pageRef: /tags
       weight: 2
+      params:
+        type: link
+        icon: tag
     - name: Search
       weight: 3
       params:
