@@ -236,7 +236,7 @@ create database casdoor with owner casdoor;
 - RustFS：新星，使用体验不错，但是有很多负面评价，成熟度不够
 - Ceph：分布式存储。（我暂未尝试过）
 
-目前我的选择是SeaweedFS。DockerCompose配置文件：
+目前我的选择是SeaweedFS。（[参阅另一篇博客](/blog/backend/seaweedfs/)）
 
 > [!NOTE]
 > WebDAV是可选项，可以套一个OpenList（AList后继）作为前端管理文件

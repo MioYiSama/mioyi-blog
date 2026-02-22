@@ -236,7 +236,7 @@ Since MinIO turned evil, it seems there are no easy-to-use object storages left.
 - RustFS: A rising star, good user experience, but has many negative reviews and insufficient maturity.
 - Ceph: Distributed storage. (I haven't tried it yet).
 
-My current choice is SeaweedFS. DockerCompose configuration file:
+My current choice is SeaweedFS. ([Refer to another blog](/blog/backend/seaweedfs/))
 
 > [!NOTE]
 > WebDAV is an option; you can wrap an OpenList (AList successor) as a front-end to manage files.
