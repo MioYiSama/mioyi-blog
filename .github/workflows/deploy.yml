@@ -8,6 +8,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      HUGO_CACHEDIR: /tmp/hugo_cache_runner
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,20 +25,16 @@ jobs:
           hugo-version: "latest"
           extended: true
 
-      - name: Get Hugo cache dir
-        id: hugo-cache
-        run: echo "dir=$(hugo config | grep cachedir | awk -F"'" '{print $2}')" >> $GITHUB_OUTPUT
-
       - name: Setup Cache
         uses: actions/cache@v4
         with:
-          path: ${{ steps.hugo-cache.outputs.dir }}
+          path: ${{ env.HUGO_CACHEDIR }}
           key: ${{ runner.os }}-hugomod-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-hugomod-
 
       - name: Build with hugo
-        run: hugo --minify --gc
+        run: hugo --minify --gc && echo $(hugo config | grep cachedir)
         env:
           HUGO_ENV: production
           HUGO_ENVIRONMENT: production
