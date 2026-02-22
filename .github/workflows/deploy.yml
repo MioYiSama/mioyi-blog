@@ -39,6 +39,6 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           source: public/*
-          target: /root/blog
+          target: /var/www/blog
           strip_components: 1
           rm: true
