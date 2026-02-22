@@ -6,6 +6,7 @@ tags: [编程语言]
 ## 1. **数据类型大小**
 
 ### 问题
+
 整数和指针大小在不同平台上有所不同。
 
 ```c
@@ -24,6 +25,7 @@ size_t sz;      // 用于大小
 ## 2. **字节序（Endianness）**
 
 ### 问题
+
 不同 CPU 以不同方式存储多字节值。
 
 ```c
@@ -69,6 +71,7 @@ alignas(16) int x;
 ## 4. **操作系统差异**
 
 ### 文件路径
+
 ```c
 // ❌ 平台特定
 #define PATH "C:\\Users\\file.txt"     // 仅 Windows
@@ -83,6 +86,7 @@ alignas(16) int x;
 ```
 
 ### 系统 API
+
 ```c
 // ❌ 平台特定 API
 #include <windows.h>
@@ -284,6 +288,7 @@ void func(void);
 ## **可移植代码的最佳实践**
 
 ### 1. **使用标准头文件**
+
 ```c
 #include <stdint.h>   // 固定宽度整数
 #include <stddef.h>   // size_t, ptrdiff_t
@@ -292,6 +297,7 @@ void func(void);
 ```
 
 ### 2. **功能测试**
+
 ```c
 #if __STDC_VERSION__ >= 201112L
     // C11 功能可用
@@ -305,6 +311,7 @@ void func(void);
 ```
 
 ### 3. **使用 sizeof 计算大小**
+
 ```c
 // ❌ 切勿硬编码大小
 int array[10];
@@ -315,6 +322,7 @@ memset(array, 0, sizeof(array));
 ```
 
 ### 4. **配置头文件**
+
 ```c
 // config.h（由构建系统生成）
 #ifdef HAVE_UNISTD_H
@@ -327,6 +335,7 @@ memset(array, 0, sizeof(array));
 ```
 
 ### 5. **跨平台库**
+
 - 使用如 **Boost**（C++）、**GLib**、**APR** 等库
 - 抽象操作系统特定功能
 - 使用 CMake 实现构建可移植性

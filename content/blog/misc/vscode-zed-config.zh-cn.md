@@ -63,81 +63,80 @@ tags: [杂项]
   "ui_font_size": 16.0,
   "theme": {
     "light": "Github Light",
-    "dark": "Github Dark",
+    "dark": "Github Dark"
   },
   "icon_theme": {
     "mode": "system",
     "light": "Catppuccin Latte",
-    "dark": "Catppuccin Mocha",
+    "dark": "Catppuccin Mocha"
   },
   "tabs": {
     "git_status": false,
     "file_icons": true,
-    "close_position": "left",
+    "close_position": "left"
   },
 
   // Editor
   "diagnostics": {
     "inline": {
-      "enabled": true,
-    },
+      "enabled": true
+    }
   },
   "sticky_scroll": {
-    "enabled": true,
+    "enabled": true
   },
   "hover_popover_delay": 100,
   "minimap": {
-    "show": "auto",
+    "show": "auto"
   },
   "colorize_brackets": true,
   "toolbar": {
     "code_actions": false,
-    "quick_actions": false,
+    "quick_actions": false
   },
   "preview_tabs": {
     "enable_preview_from_project_panel": false,
     "enable_preview_multibuffer_from_code_navigation": true,
-    "enable_keep_preview_on_code_navigation": true,
+    "enable_keep_preview_on_code_navigation": true
   },
   "tab_bar": {
     "show_tab_bar_buttons": false,
-    "show_nav_history_buttons": false,
+    "show_nav_history_buttons": false
   },
   "title_bar": {
     "show_sign_in": false,
     "show_user_menu": false,
     "show_menus": false,
-    "show_branch_name": false,
+    "show_branch_name": false
   },
   "git_panel": {
-    "tree_view": true,
+    "tree_view": true
   },
   "terminal": {
-    "cursor_shape": "bar",
+    "cursor_shape": "bar"
   },
 
   // Language
   "prettier": {
-    "allowed": true,
+    "allowed": true
   },
   "languages": {
     "Python": {
-      "language_servers": ["ty", "!basedpyright", "..."],
-    },
+      "language_servers": ["ty", "!basedpyright", "..."]
+    }
   },
 
   // Debloat
   "disable_ai": true,
   "collaboration_panel": {
-    "button": false,
+    "button": false
   },
   "session": {
-    "trust_all_worktrees": true,
+    "trust_all_worktrees": true
   },
   "telemetry": {
     "diagnostics": false,
-    "metrics": false,
-  },
+    "metrics": false
+  }
 }
-
 ```

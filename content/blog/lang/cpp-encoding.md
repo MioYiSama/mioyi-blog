@@ -1,5 +1,5 @@
 ---
-title: 'Deep Dive: Why Does C/C++ Frequently Encounter Chinese Garbled Characters Under Windows?'
+title: "Deep Dive: Why Does C/C++ Frequently Encounter Chinese Garbled Characters Under Windows?"
 tags: [programming-language]
 ---
 
@@ -29,12 +29,12 @@ When using `printf` or `cout`, they do not automatically handle complex encoding
 
 The default encoding of the Windows terminal depends on the System Locale, rather than Unicode. Unless you manually enable the Beta option "Use Unicode UTF-8...", the system forces different code pages based on the language:
 
-| Language Environment | Code Page | Encoding Standard | Remarks |
-| :---------- | :-------------- | :---------- | :--------------- |
-| **Simplified Chinese** | CP936 | GBK | Easily confused with UTF-8, causing corruption |
-| **Traditional Chinese** | CP950 | Big5 | Commonly used in Hong Kong and Taiwan |
-| **English (Default)** | CP437/1252 | OEM/ANSI | Does not support non-Western European characters |
-| **JP/KR/RU** | CP932/949/1251 | Shift-JIS, etc. | Each acting independently |
+| Language Environment    | Code Page      | Encoding Standard | Remarks                                          |
+| :---------------------- | :------------- | :---------------- | :----------------------------------------------- |
+| **Simplified Chinese**  | CP936          | GBK               | Easily confused with UTF-8, causing corruption   |
+| **Traditional Chinese** | CP950          | Big5              | Commonly used in Hong Kong and Taiwan            |
+| **English (Default)**   | CP437/1252     | OEM/ANSI          | Does not support non-Western European characters |
+| **JP/KR/RU**            | CP932/949/1251 | Shift-JIS, etc.   | Each acting independently                        |
 
 **The root of garbled text** usually lies in the inconsistency of encoding across these four stages:
 
@@ -63,7 +63,7 @@ void print_utf8(const std::u8string_view input) {
   // 1. Calculate the UTF-16 length required for conversion
   const auto output_length = simdutf::utf16_length_from_utf8(
       reinterpret_cast<const char *>(input.data()), input.size());
-  
+
   if (output_length <= 0) return;
 
   // 2. Use C++23 resize_and_overwrite for in-place writing, avoiding redundant copies
@@ -82,7 +82,7 @@ void print_utf8(const std::u8string_view input) {
 
 // Usage Example
 int main() {
-    print_utf8(u8"Hello, 世界 ☺️"); 
+    print_utf8(u8"Hello, 世界 ☺️");
     return 0;
 }
 ```

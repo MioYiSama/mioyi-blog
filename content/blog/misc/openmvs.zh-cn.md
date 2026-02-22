@@ -17,13 +17,13 @@ docker pull openmvs/openmvs-ubuntu
 4. 建立项目文件夹
 
 {{< filetree/container >}}
-  {{< filetree/folder name="C:\Users\mioyi\project" >}}
-    {{< filetree/folder name="images" >}}
-      {{< filetree/file name="00000.jpg" >}}
-      {{< filetree/file name="00001.jpg" >}}
-      {{< filetree/file name="..." >}}
-    {{< /filetree/folder >}}
-  {{< /filetree/folder >}}
+{{< filetree/folder name="C:\Users\mioyi\project" >}}
+{{< filetree/folder name="images" >}}
+{{< filetree/file name="00000.jpg" >}}
+{{< filetree/file name="00001.jpg" >}}
+{{< filetree/file name="..." >}}
+{{< /filetree/folder >}}
+{{< /filetree/folder >}}
 {{< /filetree/container >}}
 
 ## 步骤
@@ -64,7 +64,6 @@ exit
 ```
 
 2. 用OpenMVS生成纹理
-
 
 ```bash
 # 启动 Docker 容器

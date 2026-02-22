@@ -1,25 +1,30 @@
 ---
 title: Full-Stack Authentication and Authorization Solution
 tags: [backend]
-----------
+---
 
 For SaaS development, authentication and authorization are often too tedious to build from scratch in development environments, yet essential for production. This article explains the most cost-effective solution in one go.
 
 ## Core Concepts
 
 ### Authentication
+
 Determining the identity of a user.
 
 ### Authorization
+
 Determining whether to grant permissions based on the user's identity.
 
 ### OAuth2
+
 An authorization protocol.
 
 ### OIDC (OpenID Connect)
+
 An authentication protocol built on top of OAuth 2.0, effectively OAuth 2.0 + an identity layer.
 
 ### Role-Based Access Control (RBAC)
+
 Granting permissions based on user roles (e.g., an admin can access `/api/admin/*`, while a user can access `/api/xxx/*`).
 
 ## Pain Points of Traditional Solutions
@@ -71,7 +76,6 @@ Finished Product Screenshots:
 #### Set Up the Authentication Server
 
 1. Deploy the authentication service using Docker. Any server compliant with OAuth2 and OIDC standards works (e.g., Keycloak). Here we choose Casdoor for its superior ease of use. (<https://casdoor.org/docs/>)
-
    - `docker-compose.yml`
 
      ```yaml
@@ -221,7 +225,6 @@ Finished Product Screenshots:
    ```
 
 2. Configure Middleware. Notes:
-
    - Middleware is responsible for extracting the Access Token from Cookies, parsing/verifying the JWT, and calling the Casdoor API for authorization. If you aren't using Casdoor, perform Casbin checks manually after getting the role.
    - Public APIs cannot be managed by Casdoor and must be configured manually in the middleware.
    - Parsing the JWT verifies its integrity (using the previously downloaded public key).
@@ -677,9 +680,9 @@ We can use the standard OIDC API (`/api/userinfo`) to get real-time info (gettin
   "sub": "7808235c-4f97-4b41-b881-f70a26f83ae1",
   "iss": "http://localhost:8000",
   "aud": "212fad95c629e01d409a",
-  "preferred_username": "mioyi", 
-  "name": "Mioyi12", 
-  "picture": "https://cdn.casbin.org/img/casbin.svg", 
+  "preferred_username": "mioyi",
+  "name": "Mioyi12",
+  "picture": "https://cdn.casbin.org/img/casbin.svg",
   "groups": ["AuctionMonitorSystemOrganization/admin_group"]
 }
 ```

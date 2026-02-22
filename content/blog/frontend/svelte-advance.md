@@ -70,7 +70,7 @@ class Box {
 > Supports Map, Set, Date, URL, URLSearchParams
 
 ```js
-import { SvelteDate } from 'svelte/reactivity';
+import { SvelteDate } from "svelte/reactivity";
 
 let date = new SvelteDate();
 ```
@@ -262,7 +262,7 @@ let date = new SvelteDate();
 - Making component props bindable
 
 ```js
-let { value = $bindable(''), onsubmit } = $props();
+let { value = $bindable(""), onsubmit } = $props();
 ```
 
 - Component Instances
@@ -287,15 +287,15 @@ let { value = $bindable(''), onsubmit } = $props();
 - Deferred Transitions
 
 ```js
-import { crossfade } from 'svelte/transition';
-import { quintOut } from 'svelte/easing';
+import { crossfade } from "svelte/transition";
+import { quintOut } from "svelte/easing";
 
 export const [send, receive] = crossfade({
   duration: (d) => Math.sqrt(d * 200),
 
   fallback(node, params) {
     const style = getComputedStyle(node);
-    const transform = style.transform === 'none' ? '' : style.transform;
+    const transform = style.transform === "none" ? "" : style.transform;
 
     return {
       duration: 600,
@@ -303,9 +303,9 @@ export const [send, receive] = crossfade({
       css: (t) => `
         transform: ${transform} scale(${t});
         opacity: ${t}
-      `
+      `,
     };
-  }
+  },
 });
 ```
 
@@ -350,21 +350,20 @@ export const [send, receive] = crossfade({
 ### Special Elements
 
 - `<svelte:window>`
-
   - Can add event listeners
   - Can bind innerWidth, innerHeight, outerWidth, outerHeight, scrollX, scrollY, online (window\.navigator.onLine). All are read-only except scrollX and scrollY.
+
 - `<svelte:document>`
-
   - Can add event listeners
+
 - `<svelte:body>`
-
   - Can add event listeners
-- `<svelte:head>`
 
+- `<svelte:head>`
   - Allows adding content to the HTML `<head>`
   - In SSR mode, it will be returned separately from other HTML content
-- `<svelte:element>`
 
+- `<svelte:element>`
   - Can specify the type of the element via the `this` property
 
 ```svelte

@@ -23,7 +23,7 @@ tags: [前端]
     "module": "esnext",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    
+
     // Emit
     "noEmit": true,
 
@@ -40,8 +40,8 @@ tags: [前端]
     "target": "esnext",
 
     // Completeness
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+  },
 }
 ```
 

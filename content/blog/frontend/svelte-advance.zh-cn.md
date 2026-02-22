@@ -70,7 +70,7 @@ class Box {
 > 支持Map, Set, Date, URL, URLSearchParams
 
 ```js
-import { SvelteDate } from 'svelte/reactivity';
+import { SvelteDate } from "svelte/reactivity";
 
 let date = new SvelteDate();
 ```
@@ -234,7 +234,7 @@ let date = new SvelteDate();
 - Dimensions
 
 > 支持clientWidth, clientHeight, offsetWidth, offsetHeight
-> 
+>
 > 只读绑定
 
 ```svelte
@@ -262,7 +262,7 @@ let date = new SvelteDate();
 - 让组件属性可绑定
 
 ```js
-let { value = $bindable(''), onsubmit } = $props();
+let { value = $bindable(""), onsubmit } = $props();
 ```
 
 - 组件元素
@@ -287,15 +287,15 @@ let { value = $bindable(''), onsubmit } = $props();
 - 延时过渡
 
 ```js
-import { crossfade } from 'svelte/transition';
-import { quintOut } from 'svelte/easing';
+import { crossfade } from "svelte/transition";
+import { quintOut } from "svelte/easing";
 
 export const [send, receive] = crossfade({
   duration: (d) => Math.sqrt(d * 200),
 
   fallback(node, params) {
     const style = getComputedStyle(node);
-    const transform = style.transform === 'none' ? '' : style.transform;
+    const transform = style.transform === "none" ? "" : style.transform;
 
     return {
       duration: 600,
@@ -303,9 +303,9 @@ export const [send, receive] = crossfade({
       css: (t) => `
         transform: ${transform} scale(${t});
         opacity: ${t}
-      `
+      `,
     };
-  }
+  },
 });
 ```
 
@@ -350,21 +350,20 @@ export const [send, receive] = crossfade({
 ### 特殊元素
 
 - `<svelte:window>`
-  
   - 可添加事件监听器
   - 可绑定innerWidth, innerHeight, outerWidth, outerHeight, scrollX, scrollY, online（window.navigator.onLine）。除了scrollX和scrollY均为只读绑定
+
 - `<svelte:document>`
-  
   - 可添加事件监听器
+
 - `<svelte:body>`
-  
   - 可添加事件监听器
+
 - `<svelte:head>`
-  
   - 可以往HTML的`<head>`中加入内容
   - SSR模式下会与其他HTML内容分开返回
+
 - `<svelte:element>`
-  
   - 可通过`this`属性指定该元素的类型
 
 ```svelte
@@ -398,8 +397,9 @@ export const [send, receive] = crossfade({
 
 - 代码只会在模块首次被Evaluate的时候运行
 - 可以使用export导出（但不能使用默认导出，因为默认导出是组件自身）
-	PUBLIC	f	{"tags": ["Frontend"], "property": {"hasCode": true}}
-1	9dc7fBTTjuVLUCDDW6zqfc	1	1747915586	1747916992	NORMAL	#Frontend
+  PUBLIC f {"tags": ["Frontend"], "property": {"hasCode": true}}
+  1 9dc7fBTTjuVLUCDDW6zqfc 1 1747915586 1747916992 NORMAL #Frontend
+
 # Framework Agnostic Icon
 
 Packages:

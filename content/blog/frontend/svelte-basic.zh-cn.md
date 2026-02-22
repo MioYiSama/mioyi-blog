@@ -58,7 +58,7 @@ tags: [前端]
 ```svelte
 <script>
   let count = $state(0);
-  
+
   function increment() {
     count += 1;
   }
@@ -92,7 +92,7 @@ tags: [前端]
 <script>
   let numbers = $state([1, 2, 3, 4]);
   console.log($state.snapshot(numbers));
-  
+
   // 使用 $inspect 在状态每次变化时自动记录快照
   $inspect(numbers).with(console.trace);
 </script>
@@ -119,7 +119,7 @@ tags: [前端]
 
 ```js
 export const counter = $state({
-  count: 0
+  count: 0,
 });
 ```
 
@@ -453,7 +453,7 @@ function typewriter(node, { speed = 1 }) {
     tick: (t) => {
       const i = Math.trunc(text.length * t);
       node.textContent = text.slice(0, i);
-    }
+    },
   };
 }
 ```

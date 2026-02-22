@@ -22,17 +22,15 @@ jobs:
         with:
           hugo-version: "latest"
           extended: true
-      
+
       - name: Setup Cache
         uses: actions/cache@v4
         with:
-          path: |
-            /tmp/hugo_cache
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-hugo-${{ hashFiles('**/go.sum') }}
+          path: /home/runner/.cache/hugo_cache
+          key: ${{ runner.os }}-hugomod-${{ hashFiles('**/go.sum') }}
           restore-keys: |
-            ${{ runner.os }}-hugo-
-      
+            ${{ runner.os }}-hugomod-
+
       - name: Build with hugo
         run: hugo --minify --gc
         env:
