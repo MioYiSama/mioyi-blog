@@ -9,6 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
+      HUGO_VERSION: "0.156.0"
       HUGO_CACHEDIR: /tmp/hugo_cache_runner
     steps:
       - name: Checkout
@@ -22,16 +23,16 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: "latest"
+          hugo-version: ${{ env.HUGO_VERSION }}
           extended: true
 
       - name: Setup Cache
         uses: actions/cache@v4
         with:
           path: ${{ env.HUGO_CACHEDIR }}
-          key: ${{ runner.os }}-hugomod-${{ hashFiles('**/go.sum') }}
+          key: ${{ runner.os }}-hugo${{ env.HUGO_VERSION }}-${{ hashFiles('**/go.sum') }}
           restore-keys: |
-            ${{ runner.os }}-hugomod-
+            ${{ runner.os }}-hugo${{ env.HUGO_VERSION }}-
 
       - name: Build with hugo
         run: hugo --minify --gc && echo $(hugo config | grep cachedir)
