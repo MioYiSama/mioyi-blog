@@ -1,7 +1,6 @@
 ---
 title: Some Insights into Playing with Servers
 tags: [backend]
-weight: -1
 ---
 
 ## Server Selection

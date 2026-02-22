@@ -1,7 +1,6 @@
 ---
 title: Full-Stack Authentication and Authorization Solution
-tags: [Backend]
-weight: -3
+tags: [backend]
 ----------
 
 For SaaS development, authentication and authorization are often too tedious to build from scratch in development environments, yet essential for production. This article explains the most cost-effective solution in one go.

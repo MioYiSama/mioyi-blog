@@ -1,4 +1,5 @@
 baseURL: "https://www.mioyi.net/"
+timeZone: Asia/Shanghai
 
 defaultContentLanguage: en
 languages:
@@ -92,6 +93,7 @@ params:
   blog:
     list:
       displayTags: true
+      sortBy: "lastmod"
 
 outputs:
   page: [html, markdown]

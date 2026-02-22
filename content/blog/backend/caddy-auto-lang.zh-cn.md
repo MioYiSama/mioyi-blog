@@ -1,7 +1,6 @@
 ---
 title: Caddy首次访问自动切换语言
 tags: [后端]
-weight: -2
 ---
 
 用Caddy给博客做了一个首次访问自动切换语言的功能。主要就是matcher和Cookie的问题

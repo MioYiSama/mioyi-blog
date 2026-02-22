@@ -1,7 +1,6 @@
 ---
 title: Caddy auto lang switch on first visit
 tags: [backend]
-weight: -2
 ---
 
 Implemented a first‑visit automatic language switch for a blog using Caddy. The main issues are with matchers and cookies.
