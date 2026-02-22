@@ -39,6 +39,9 @@ jobs:
           HUGO_ENV: production
           HUGO_ENVIRONMENT: production
 
+      - name: Compress via zstd
+        run: chmod +x ./zstd.sh && ./zstd.sh
+
       - name: Deploy via rsync
         uses: easingthemes/ssh-deploy@main
         with:
