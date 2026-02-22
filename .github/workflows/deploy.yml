@@ -13,7 +13,7 @@ jobs:
       HUGO_CACHEDIR: /tmp/hugo_cache_runner
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -27,7 +27,7 @@ jobs:
           extended: true
 
       - name: Setup Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.HUGO_CACHEDIR }}
           key: ${{ runner.os }}-hugo${{ env.HUGO_VERSION }}-${{ hashFiles('**/go.sum') }}
@@ -35,12 +35,15 @@ jobs:
             ${{ runner.os }}-hugo${{ env.HUGO_VERSION }}-
 
       - name: Build with hugo
-        run: hugo --minify --gc && echo $(hugo config | grep cachedir)
+        run: hugo --minify --gc
         env:
           HUGO_ENV: production
           HUGO_ENVIRONMENT: production
 
-      - name: Compress via zstd
+      - name: Debug hugo info
+        run: hugo config && hugo version
+
+      - name: Precompress with zstd
         run: chmod +x ./zstd.sh && ./zstd.sh
 
       - name: Deploy via rsync
