@@ -55,7 +55,7 @@ Workflow:
 
 The Authentication Server handles everything: username/password auth, third-party logins, user profile editing, 2FA, etc., eliminating boilerplate code. OAuth is an industry standard with guaranteed security. Furthermore, one Authentication Server can manage multiple applications, providing a once-and-for-all solution.
 
-> \[!NOTE]
+> [!NOTE]
 > My solution does not use any specific auth libraries; it is entirely based on HTTP and OIDC protocols, making migration to other languages very easy. The backend only needs to support middleware/interceptors. Even with Java + Spring Boot, the code totals less than 200 lines.
 
 ![image.webp](image.webp)
@@ -209,7 +209,7 @@ Finished Product Screenshots:
 
 #### Backend Configuration
 
-> \[!NOTE]
+> [!NOTE]
 > Example using Go + Fiber.
 
 1. Configure environment variables:
@@ -484,7 +484,7 @@ Finished Product Screenshots:
 
 #### Frontend Configuration
 
-> \[!NOTE]
+> [!NOTE]
 > Example using Preact, Vite, and TanStack Query.
 
 1. Configure environment variables (`.env.development`):

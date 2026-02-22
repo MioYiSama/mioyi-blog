@@ -1,46 +1,46 @@
 ---
-title: Some Insights into Playing with Servers
-tags: [backend]
+title: Some Insights on Tinkering with Servers
+tags: [Backend]
 ---
 
 ## Server Selection
 
-- Cloud Vendors: Foreign vendors basically require a credit card, so you can pass them by. In China, Alibaba Cloud has the largest market share, but for ordinary individuals, the difference between various major cloud services is negligible. You can choose based on price, but be cautious with smaller vendors.
-- CPU: At least two cores. Managing a server with one core is difficult, as services will compete with your SSH and VSCode Server for resources.
-- RAM: At least 2GB; 4GB is the comfort zone. It's manageable if you don't have Java services, but once Java is involved, forget about it. Servers with low memory can only run Go and Rust; JVM and Node services are completely out of the question. Anyone who has personally deployed services knows how great Go is; I wouldn't dare use JVM.
-- Network: If you are sure your traffic won't be high or you aren't afraid of DDoS, you can choose pay-by-traffic; otherwise, choose fixed bandwidth.
-- Region: Currently, Hong Kong is the optimal choice. Not only does it not require ICP filing, but accessing Docker Hub, GitHub, Hugging Face, etc., does not require a proxy, and you can even set up a proxy server.
+- Cloud providers: Foreign ones basically require a credit card, so you can pass on them directly. Domestically, Alibaba Cloud has the largest market share, but the differences between major cloud providers' services are negligible for ordinary people. You can choose based on price, but be cautious when choosing small providers.
+- CPU: At least two cores. Operation and maintenance are hard with just one core, as your services will fight for resources with your ssh and vscode server.
+- Memory: At least 2GB; 4GB is the comfort zone. It's fine if there are no Java services, but once you have Java, just forget about it. Servers with little memory can only run go and rust; jvm and node services are completely unusable. Anyone who has manually deployed services knows how sweet go is, and wouldn't dare to use jvm.
+- Network: If you are sure the traffic will be low or if you are not afraid of DDoS, you can choose pay-by-traffic; otherwise, choose fixed bandwidth.
+- Region: Currently, Hong Kong is still the optimal solution. Not only is ICP registration not required, but accessing Docker Hub, GitHub, Huggingface, etc., doesn't require a proxy, and you can even set up a proxy server.
 
-## OS Selection
+## Operating System Selection
 
-Server-side is either Debian-based or RHEL-based.
+Server sides are typically either Debian-based or RHEL-based.
 
-Among the free options, Debian and AlmaLinux are the most prominent (the reputation of RockyLinux's author is not great). Choose AlmaLinux if you like RHEL (the conservative camp), but the `dnf` manager updates packages much slower than `apt`, and sometimes package updates depend on Red Hat's schedule. Debian has a clear advantage in the ecosystem; Docker even chose Debian as the basis for its Docker Hardened Image.
+Among the free ones, Debian and AlmaLinux stand out the most (the author of RockyLinux has a bad reputation). Those who like RHEL (conservatives) should choose AlmaLinux, but the dnf package manager updates packages much slower than apt, and sometimes package updates are at the mercy of Red Hat. Debian has an extremely obvious advantage in ecology; even Docker chose debian for its Docker Hardened Image.
 
-> \[!NOTE]
-> Actually, CentOS Stream isn't unusable; it's just that the psychological gap it brought to people was too large, making it feel "dangerous." If you don't have an extreme obsession with security, worrying about this is less productive than worrying about whether other security measures are in place. In reality, it may even receive security patches earlier than RHEL, with Fedora serving as the upstream safety net.
+> [!NOTE]
+> Actually, CentOS Stream is not unusable, it's just that the psychological gap it brought to people is too big, making it feel very dangerous. If you are not a strict perfectionist about security, rather than worrying about this, you should worry about whether security measures elsewhere are done well. In fact, it can sometimes get security patches even earlier than RHEL, and it is backed by Fedora upstream.
 
-## Preparation
+## Preparation Work
 
-### SSH
+### ssh
 
-It is not recommended to use passwords; use keys instead. Enable public key login in `sshd_config` and you can also disable password login while you're at it.
+Using passwords is not recommended; it's recommended to use keys. Enable public key login in sshd_config, and you can conveniently disable password login while you are at it.
 
-The best public/private key algorithm is `ed25519` (generated via `ssh-keygen -t ed25519`). The rest of the steps are omitted as tutorials are extremely abundant.
+The best public-private key algorithm is ed25519 (can be generated using `ssh-keygen -t ed25519`). I will skip the rest of the operations, as there are extremely many tutorials available.
 
 ### Docker
 
-The advantage of Docker isn't just that it's reproducible. Service configuration files, life cycles, networks (ports), logs, updates, CVEs, etc., can all be handled by Docker.
+Docker's advantages are not just being reproducible. Service configuration files, lifecycles, networks (ports), logs, updates, CVEs, etc., can all be handled entirely by Docker.
 
-The official documentation explains the installation method in detail: <https://docs.docker.com/engine/install/>
+The installation method is detailed in the official documentation: <https://docs.docker.com/engine/install/>
 
-If the default user is not root, consider adding the regular user to the `docker` group.
+If you are not the root user by default, consider adding your regular user to the docker group.
 
 ### Using Docker
 
-Whether it's one service or multiple, it's recommended to use Docker Compose for all configurations. The command line is too limited; configuration files are easier to maintain.
+Whether it is a single service or multiple services, it is recommended to configure them all using Docker Compose. The limitations of the command line are too great; configuration files are easier to maintain.
 
-You can organize your configuration files in a dedicated folder like I do:
+You can be like me and specifically create a folder to organize configuration files:
 
 {{< filetree/container >}}
 {{< filetree/folder name="docker" >}}
@@ -77,10 +77,10 @@ You can organize your configuration files in a dedicated folder like I do:
 
 Specific configuration examples:
 
-- Specify major version numbers clearly to facilitate seamless updates; if not possible, check for versions like `stable`, and choose `latest` as a last resort. Do not update services lightly later, as it might cause the service to crash (upgrading underlying services can cause a chain reaction, crashing other services). Thus, I didn't write `pull_policy: always`. For those strictly following SemVer, you can update boldly.
-- It is recommended to use `.env` files rather than writing environment variables directly in the compose file.
-- Use local directory mounts for configuration files globally; otherwise, try to use Docker's volume management. You can check the actual storage path on the host via `docker volume inspect <id>`.
-- Use bridge networks and Docker's built-in IP resolution (container names automatically resolve to specific IPs) as much as possible. While host mode is convenient, container ports can easily conflict, and it's dangerous if the firewall is misconfigured. Create an independent bridge network for producers; consumers join the producer's network and access them via container names. Therefore, avoid exposing ports to the host machine as much as possible, except for the reverse proxy service.
+- Write down the major version number clearly if possible, to facilitate seamless updates; if not, first check if there are versions like stable, and finally choose latest. Do not update services lightly afterwards, otherwise it is very likely to cause service crashes (if upgrading underlying services, it will also cause a chain reaction, crashing other services). Therefore, I did not write `pull_policy: always`. Those strictly following SemVer can update boldly.
+- It is recommended to use `.env` and not write environment variables directly in the compose file.
+- Configuration files should be uniformly mounted using local directories; otherwise, try to use Docker's volume management. You can check the actual storage path on the host machine via `docker volume inspect <id>`.
+- Use bridge networks and Docker's built-in IP resolution function (container names are automatically resolved to specific IPs) as much as possible. Although host mode is very convenient, container ports are very prone to conflicts, and it is very dangerous if the firewall is configured improperly. The producer creates an independent bridge network, and after consumers join the producer's network, they access it using the container name. Therefore, except for reverse proxy services, avoid exposing ports to the host machine as much as possible.
 
 ```yml {filename="docker-compose.yml"}
 services:
@@ -131,15 +131,15 @@ volumes:
     name: caddy2-config
 ```
 
-## Selection of Infrastructure Services
+## Basic Service Selection
 
-The main infrastructure services are reverse proxy (external access), database (data storage), object storage (helping the database store files), and identity authentication (self-explanatory).
+The most essential basic services are reverse proxy (external access), database (storing data), object storage (assisting the database in storing files), and identity authentication (needless to say).
 
 ### Reverse Proxy
 
-Many people's first thought is Nginx, a very established web server. However, compared to Caddy, Nginx's DX (Developer Experience) is too poor. Reverse proxies like Traefik and HAProxy are too advanced and suitable only for extreme performance scenarios; gateway products like Kong are not suitable for personal servers.
+Many people's first reaction is definitely Nginx, a very well-established web server. However, in front of Caddy, Nginx's DX (Developer Experience) is just too terrible. Reverse proxies like Traefik and HAProxy are too advanced and only suitable for extreme performance scenarios; gateway products like Kong are not suitable for personal server use.
 
-Using Caddy plugins requires building a custom Caddy executable:
+Using plugins with Caddy requires building a standalone Caddy executable file:
 
 ```dockerfile {filename="Dockerfile"}
 FROM caddy:2-builder AS builder
@@ -157,12 +157,12 @@ Caddyfile example:
 
 ```caddyfile {filename="Caddyfile"}
 {
-	acme_dns alidns { # Automatically configure HTTPS using Alibaba Cloud DNS
+	acme_dns alidns { # Automatically configure HTTPS with Alibaba Cloud DNS
 		access_key_id {env.ALIYUN_ACCESS_KEY_ID}
 		access_key_secret {env.ALIYUN_ACCESS_KEY_SECRET}
 	}
 
-	layer4 { # TCP proxy for database connections; using Caddy is more secure
+	layer4 { # TCP proxy for database connections; using Caddy uniformly is safer
 		:5432 {
 			route {
 				proxy postgres18:5432
@@ -171,12 +171,12 @@ Caddyfile example:
 	}
 }
 
-mioyi.net { # Auto redirect to www
+mioyi.net { # Automatically redirect to www
 	redir https://www.mioyi.net
 }
 
 *.mioyi.net {
-	encode # Auto zstd, gzip compression
+	encode # Automatic zstd, gzip compression
 
 	@www host www.mioyi.net
 	handle @www {
@@ -208,7 +208,7 @@ mioyi.net { # Auto redirect to www
 *.s3.mioyi.net {
 	encode
 
-	rewrite * /{http.request.host.labels.3}{uri} # Auto rewrite Virtual Host style links
+	rewrite * /{http.request.host.labels.3}{uri} # Automatically rewrite Virtual Host style links
 
 	reverse_proxy seaweedfs-s3:8333 {
 		flush_interval -1
@@ -218,9 +218,9 @@ mioyi.net { # Auto redirect to www
 
 ### Database
 
-PostgreSQL is the leader among open-source databases; it goes without saying.
+PostgreSQL is an outstanding leader among open-source databases; needless to say more.
 
-Tutorial for creating users + databases:
+User + database creation tutorial:
 
 ```sql
 create user casdoor with password '123456';
@@ -229,28 +229,30 @@ create database casdoor with owner casdoor;
 
 ### Object Storage
 
-Since MinIO turned "evil," convenient object storage seems to have disappeared. Currently, the ones with high community attention are:
+Since MinIO turned evil, it seems there are no easy-to-use object storages left. Currently, the ones with relatively high community attention are:
 
-- GarageHQ: Only supports CLI management; the current version does not support anonymous file access.
-- SeaweedFS: Distributed storage, but supports both anonymous access and fine-grained authentication. The only object storage among Docker Hardened Images, it is trustworthy enough.
-- RustFS: A rising star with a good user experience, but has many negative reviews and lacks maturity.
-- Ceph: Distributed storage. (I haven't tried it yet)
+- GarageHQ: Only supports CLI management; the current version does not yet support anonymous file access.
+- SeaweedFS: Distributed storage, but it supports both anonymous access and fine-grained authentication. The only object storage in the Docker Hardened Image, trustworthy enough.
+- RustFS: A rising star, good user experience, but has many negative reviews and insufficient maturity.
+- Ceph: Distributed storage. (I haven't tried it yet).
 
 My current choice is SeaweedFS. DockerCompose configuration file:
 
-> \[!NOTE]
-> WebDAV is optional; you can wrap it with OpenList (the successor to AList) as a frontend for managing files.
+> [!NOTE]
+> WebDAV is an option; you can wrap an OpenList (AList successor) as a front-end to manage files.
 
 ```yml {filename="docker-compose.yml"}
-# https://github.com/seaweedfs/seaweedfs/wiki/Production-Setup
 # https://github.com/seaweedfs/seaweedfs/blob/master/docker/seaweedfs-compose.yml
+# https://github.com/seaweedfs/seaweedfs/wiki/Production-Setup
 services:
   master:
     image: chrislusf/seaweedfs:latest
 
     container_name: seaweedfs-master
     restart: unless-stopped
-    command: master -ip=seaweedfs-master -ip.bind=0.0.0.0 -defaultReplication=000 -volumeSizeLimitMB=1024
+    # -defaultReplication=000: https://github.com/seaweedfs/seaweedfs/wiki/Replication
+    # -volumeSizeLimitMB=64: https://github.com/seaweedfs/seaweedfs/wiki/Production-Setup
+    command: master -ip=seaweedfs-master -ip.bind=0.0.0.0 -defaultReplication=000 -volumeSizeLimitMB=64
 
     networks:
       - seaweedfs
@@ -263,6 +265,9 @@ services:
 
     container_name: seaweedfs-volume
     restart: unless-stopped
+    # -index=leveldb: https://github.com/seaweedfs/seaweedfs/wiki/Optimization
+    # -max=0: https://github.com/seaweedfs/seaweedfs/wiki/Production-Setup
+    # https://github.com/seaweedfs/seaweedfs/wiki/S3-API-FAQ#can-not-upload-due-to-no-free-volumes-left
     command: volume -ip=seaweedfs-volume -ip.bind=0.0.0.0 -master="seaweedfs-master:9333" -index=leveldb -max=0
     depends_on:
       - master
@@ -296,7 +301,9 @@ services:
 
     container_name: seaweedfs-s3
     restart: unless-stopped
-    command: s3 -ip.bind=0.0.0.0 -filer="seaweedfs-filer:8888" -config=/s3.config.json
+    # https://github.com/seaweedfs/seaweedfs/wiki/Amazon-S3-API
+    # https://github.com/seaweedfs/seaweedfs/wiki/S3-API-FAQ
+    command: s3 -ip.bind=0.0.0.0 -filer="seaweedfs-filer:8888" -config=/s3.config.json -domainName="s3.mioyi.net"
     depends_on:
       - master
       - volume
@@ -305,7 +312,6 @@ services:
     networks:
       - seaweedfs
 
-    # https://github.com/seaweedfs/seaweedfs/wiki/Amazon-S3-API
     # https://github.com/seaweedfs/seaweedfs/blob/master/docker/compose/s3.json
     volumes:
       - ./s3.config.json:/s3.config.json
@@ -347,8 +353,8 @@ volumes:
 
 S3 configuration file:
 
-> \[!NOTE]
-> It allows configuring anonymous permissions and also supports fine-grained permissions for specific operations and Buckets.
+> [!NOTE]
+> You can configure anonymous permissions, and it also supports granular permissions down to specific operations and Buckets.
 
 ```json {filename="s3.config.json"}
 {
@@ -391,11 +397,31 @@ S3 configuration file:
 }
 ```
 
+Caddy proxying S3 API (supports Virtual Host Style)
+
 > [!NOTE]
-> SeaweedFS is primarily designed for distributed storage and handling a large number of small files. Therefore, it is very aggressive in volume creation, generating numerous concurrent writes and disaster recovery replicas, along with pre-allocation. This can be very taxing for personal servers with small hard drives. Consequently, the master must be configured with `-defaultReplication=000 -volumeSizeLimitMB=64`, and the volume container must also be configured with `-max=0` to allow it to automatically expand without limits.
+> DNS requires configuring wildcard domain resolution for \*.s3.mioyi.net; just \*.mioyi.net is not enough.
+
+```caddyfile {filename="Caddyfile"}
+# https://github.com/seaweedfs/seaweedfs/wiki/S3-Nginx-Proxy
+# https://github.com/seaweedfs/seaweedfs/wiki/S3-API-FAQ#s3-authentication-fails-when-using-reverse-proxy
+*.s3.mioyi.net {
+	reverse_proxy seaweedfs-s3:8333 {
+		flush_interval -1
+
+		# https://caddyserver.com/docs/caddyfile/directives/reverse_proxy#defaults
+		# https://caddyserver.com/docs/json/apps/http/#docs
+		header_up X-Forwarded-Port {port}
+		header_up -Connection
+	}
+}
+```
+
+> [!NOTE]
+> SeaweedFS is primarily designed for distributed + massive small file storage, so it is very aggressive in volume creation. It will create a large number of concurrent writes and disaster recovery replicas, and will also pre-allocate, which is very tight for personal servers with small hard drives. Therefore, the master must be configured with `-defaultReplication=000 -volumeSizeLimitMB=64`, and simultaneously the volume container must also be configured with `-max=0` to allow it to automatically scale without limits.
 >
-> Refer to <https://github.com/seaweedfs/seaweedfs/wiki/Replication> <https://github.com/seaweedfs/seaweedfs/wiki/Optimization>
+> See <https://github.com/seaweedfs/seaweedfs/wiki/Replication> <https://github.com/seaweedfs/seaweedfs/wiki/Optimization>
 
 ### Identity Authentication
 
-Casdoor's UX (User Experience) is very good (at least better than Keycloak and Authentik), and it also has Chinese support. After configuring Single Sign-On (SSO), you can automatically log in to all the apps you deploy. The specific configuration is quite extensive, so it is omitted here.
+Casdoor's UX (User Experience) is very good (at least better than Keycloak and Authentik), and it also has Chinese support. After configuring single sign-on, you can automatically log into all the Apps you deploy. Specific configurations are quite lengthy, so they are omitted here.
