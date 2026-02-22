@@ -1,0 +1,70 @@
+---
+title: "Solid.js 速览"
+tags: [前端]
+---
+
+- 组件
+  - 内置组件
+    - \<Show> \<Switch> \<Match>
+    - \<For> \<Index>
+      - createSelector()
+      - indexArray()
+      - mapArray()
+    - \<Suspense> \<SuspenseList>
+    - \<Portal>
+    - \<Dynamic>
+    - \<ErrorBoundary>
+  - JSX属性
+    - on\* / on:\*
+    - use:\*
+    - class / classList / style
+    - attr:\* / prop:\* / bool:\*
+    - innerHTML / textContent
+    - ref
+    - /\* @once \*/
+  - 生命周期
+    - onMount()
+    - onCleanup()
+  - Utility
+    - createContext() / useContext()
+    - mergeProps() / splitProps()
+    - lazy()
+    - children()
+    - createUniqueId()
+- 渲染
+  - Client
+    - DEV
+    - render()
+  - SSR
+    - \<NoHydration>
+    - isServer
+    - hydrate()
+    - hydrationScript()
+    - renderToStream()
+    - renderToString()
+    - renderToStringAsync()
+    - getRequestEvent
+- Reactivity
+  - 数据
+    - createSignal() / Derived signals
+    - createStore() / createMutable()
+      - modifyMutable()
+      - unwrap()
+      - produce() / reconcile()
+    - createResource()
+    - createMemo()
+    - createDeferred()
+    - from() / observable()
+  - 操作
+    - createEffect() / createRenderEffect() / createComputed()
+    - createReaction()
+  - Utility
+    - batch()
+    - on()
+    - untrack()
+    - catchError()
+    - useTransition() / startTransition()
+  - Owner
+    - createRoot()
+    - getOwner()
+    - runWithOwner()

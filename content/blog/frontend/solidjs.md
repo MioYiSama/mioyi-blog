@@ -1,0 +1,70 @@
+---
+title: "Solid.js Quick Overview"
+tags: [frontend]
+---
+
+- Components
+  - internal
+    - \<Show> \<Switch> \<Match>
+    - \<For> \<Index>
+      - createSelector()
+      - indexArray()
+      - mapArray()
+    - \<Suspense> \<SuspenseList>
+    - \<Portal>
+    - \<Dynamic>
+    - \<ErrorBoundary>
+  - JSX Attributes
+    - on\* / on:\*
+    - use:\*
+    - class / classList / style
+    - attr:\* / prop:\* / bool:\*
+    - innerHTML / textContent
+    - ref
+    - /\* @once \*/
+  - Life Cycle
+    - onMount()
+    - onCleanup()
+  - Utility
+    - createContext() / useContext()
+    - mergeProps() / splitProps()
+    - lazy()
+    - children()
+    - createUniqueId()
+- Render
+  - Client
+    - DEV
+    - render()
+  - SSR
+    - \<NoHydration>
+    - isServer
+    - hydrate()
+    - hydrationScript()
+    - renderToStream()
+    - renderToString()
+    - renderToStringAsync()
+    - getRequestEvent
+- Reactivity
+  - Data
+    - createSignal() / Derived signals
+    - createStore() / createMutable()
+      - modifyMutable()
+      - unwrap()
+      - produce() / reconcile()
+    - createResource()
+    - createMemo()
+    - createDeferred()
+    - from() / observable()
+  - Operations
+    - createEffect() / createRenderEffect() / createComputed()
+    - createReaction()
+  - Utility
+    - batch()
+    - on()
+    - untrack()
+    - catchError()
+    - useTransition() / startTransition()
+  - Owner
+    - createRoot()
+    - getOwner()
+    - runWithOwner()

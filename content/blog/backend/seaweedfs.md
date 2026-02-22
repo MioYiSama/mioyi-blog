@@ -1,6 +1,6 @@
 ---
 title: SeaweedFS Ultimate Guide
-tags: [Backend]
+tags: [backend]
 ---
 
 > The official SeaweedFS Wiki is written terribly, so after many days of research I came up with a solution.
