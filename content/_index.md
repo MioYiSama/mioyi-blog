@@ -33,5 +33,5 @@ toc: false
 
 {{< cards cols="2" >}}
 {{< card link="/blog" title="Read Blogs" icon="blog" >}}
-{{< card link="/blog" title="Blogs by Tags" icon="tag" >}}
+{{< card link="/tags" title="Blog by Tags" icon="tag" >}}
 {{< /cards >}}
