@@ -22,17 +22,27 @@ jobs:
         with:
           hugo-version: "latest"
           extended: true
-
+      
+      - name: Setup Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            /tmp/hugo_cache
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-hugo-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-hugo-
+      
       - name: Build with hugo
         run: hugo --minify --gc
         env:
           HUGO_ENV: production
           HUGO_ENVIRONMENT: production
 
-      - name: Deploy to Server
+      - name: Deploy via rsync
         uses: easingthemes/ssh-deploy@main
         with:
-          ARGS: -az --delete --no-perms --info=progress2 --compress-choice=lz4
+          ARGS: -az --delete --no-perms --compress-choice=lz4
           SOURCE: public/
           TARGET: /var/www/blog
           REMOTE_USER: ${{ secrets.SSH_USER }}
