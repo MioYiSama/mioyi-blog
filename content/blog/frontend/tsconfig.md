@@ -5,6 +5,8 @@ tags: [frontend]
 
 ```jsonc {filename="tsconfig.json"}
 {
+  "include": ["src", "*.config.ts"],
+  "exclude": ["dist", "node_modules"],
   "compilerOptions": {
     // Type Checking
     "strict": true,
@@ -20,9 +22,11 @@ tags: [frontend]
     "noUnusedParameters": true,
 
     // Modules
+    "types": ["vite/client"],
     "module": "esnext",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
+    "noUncheckedSideEffectImports": true,
 
     // Emit
     "noEmit": true,
