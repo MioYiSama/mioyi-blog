@@ -78,9 +78,9 @@ params:
     engine: mathjax
   toc:
     displayTags: true
+
   imageZoom:
     enable: true
-
   navbar:
     displayTitle: true
     displayLogo: false
@@ -90,6 +90,9 @@ params:
   page:
     contextMenu:
       enable: true
+  editURL:
+    enable: true
+    base: "https://github.com/MioYiSama/mioyi-blog/edit/main"
   blog:
     list:
       displayTags: true
