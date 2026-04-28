@@ -34,6 +34,11 @@ markup:
     noClasses: false
     lineNos: true
 
+security:
+  http:
+    urls:
+      - "(?i)^https?://[a-z]"
+
 menu:
   main:
     - identifier: blog
