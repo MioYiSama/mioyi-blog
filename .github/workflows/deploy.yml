@@ -14,17 +14,30 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
 
       - name: Disable git quotePath
         run: git config core.quotePath false
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: ${{ env.HUGO_VERSION }}
-          extended: true
+      - name: Install Hugo
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          case "$(dpkg --print-architecture)" in
+            amd64) HUGO_ARCH="linux-amd64" ;;
+            arm64) HUGO_ARCH="linux-arm64" ;;
+            *)
+              echo "Unsupported architecture: $(dpkg --print-architecture)" >&2
+              exit 1
+              ;;
+          esac
+
+          HUGO_TARBALL="hugo_extended_${HUGO_VERSION}_${HUGO_ARCH}.tar.gz"
+          HUGO_URL="https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/${HUGO_TARBALL}"
+
+          curl -fsSL "$HUGO_URL" -o "$RUNNER_TEMP/$HUGO_TARBALL"
+          tar -xzf "$RUNNER_TEMP/$HUGO_TARBALL" -C "$RUNNER_TEMP"
+          install "$RUNNER_TEMP/hugo" /usr/local/bin/hugo
 
       - name: Setup Cache
         uses: actions/cache@v5
