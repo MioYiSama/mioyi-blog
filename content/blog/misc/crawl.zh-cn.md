@@ -30,6 +30,14 @@ tags: [杂项]
 **老手避坑建议：**
 以前大家言必称 Selenium，但现在我强烈推荐 **Playwright**。它的 API 设计比 Selenium 强大得多，开箱即用的 UX（用户体验）更是直接将其甩开几个身位。
 
+#### 🔥 2026 补充：针对指纹检测的“降维打击”武器
+
+说到控制浏览器，最近开源社区出了个神兵利器：[CloakBrowser](https://github.com/CloakHQ/CloakBrowser)。
+
+以前我们为了防检测，要在 Playwright 里打各种 stealth 补丁，极其痛苦且治标不治本。而 CloakBrowser 直接从 C++ 底层 patch 了 Chromium 的源码，号称是“能通过所有 Bot 检测的潜行版 Chromium（Stealth Chromium that passes every bot detection test）”。
+
+最爽的是，它API 完全兼容 Playwright。这意味着你不需要重写任何业务代码，直接换个内核就能原地起飞，这简直是现代爬虫项目的史诗级福利。
+
 ---
 
 ### 二、 编程语言与解析工具：别被“Python 唯一论”洗脑了
