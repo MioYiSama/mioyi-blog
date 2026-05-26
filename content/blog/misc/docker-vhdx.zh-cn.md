@@ -3,6 +3,8 @@ title: 解决 WSL2 下 Docker vhdx 磁盘占用过大
 tags: [杂项]
 ---
 
+> 也可用于清理普通WSL发行版的文件
+
 在 Windows 下使用 WSL2 后端运行 Docker Desktop 时，由于动态 VHD 磁盘（`docker_data.vhdx`）的特性，即使我们在 Docker 中删除了大量的无用镜像和容器，宿主机的磁盘空间并不会自动释放。很多时候容器实际占用只有 20 多 G，但宿主机的 `.vhdx` 文件却可能膨胀到 130G，甚至把 C 盘挤占满。
 
 ## 核心解决方案：直接压缩这个 VHDX
@@ -49,3 +51,78 @@ exit
 ```
 
 执行完毕后，你会发现这块 `.vhdx` 文件的体积已经明显下降，接近于你现在系统 docker 的实际上层读写占用。之后可以重新打开 Docker Desktop 正常使用了。
+
+### 附：一键清理脚本
+
+使用方式：`.\Compact-Vhdx.ps1 C:\Users\mioyi\AppData\Local\Docker\wsl\disk\docker_data.vhdx`
+
+```powershell {filename="Compact-Vhdx.ps1"}
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory = $true, Position = 0)]
+    [ValidateNotNullOrEmpty()]
+    [string]$VhdxPath
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+function Test-IsAdministrator {
+    $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = [Security.Principal.WindowsPrincipal]::new($identity)
+    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+try {
+    $ResolvedVhdxPath = (Resolve-Path -LiteralPath $VhdxPath).ProviderPath
+} catch {
+    Write-Error "VHDX file not found: $VhdxPath"
+    exit 1
+}
+
+if (-not (Test-IsAdministrator)) {
+    if (-not $PSCommandPath) {
+        Write-Error 'This script must be saved as a .ps1 file before it can self-elevate.'
+        exit 1
+    }
+
+    $powerShellExe = (Get-Process -Id $PID).Path
+    $arguments = @(
+        '-NoProfile'
+        '-ExecutionPolicy'
+        'Bypass'
+        '-File'
+        "`"$PSCommandPath`""
+        '-VhdxPath'
+        "`"$ResolvedVhdxPath`""
+    )
+
+    $process = Start-Process -FilePath $powerShellExe -ArgumentList $arguments -Verb RunAs -Wait -PassThru
+    exit $process.ExitCode
+}
+
+$diskpartScript = [IO.Path]::GetTempFileName()
+
+try {
+    $commands = @(
+        "select vdisk file=`"$ResolvedVhdxPath`""
+        'attach vdisk readonly'
+        'compact vdisk'
+        'detach vdisk'
+        'exit'
+    )
+
+    Set-Content -LiteralPath $diskpartScript -Value $commands -Encoding ASCII
+
+    Write-Host "Running diskpart compact for: $ResolvedVhdxPath"
+    & diskpart.exe /s $diskpartScript
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "diskpart failed with exit code $LASTEXITCODE."
+    }
+} finally {
+    if (Test-Path -LiteralPath $diskpartScript) {
+        Remove-Item -LiteralPath $diskpartScript -Force
+    }
+}
+```

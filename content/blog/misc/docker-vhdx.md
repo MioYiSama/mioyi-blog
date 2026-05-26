@@ -3,49 +3,126 @@ title: Shrink Docker WSL2 vhdx Disk Size
 tags: [misc]
 ---
 
-When using Docker Desktop with the WSL2 backend on Windows, the dynamic VHD disk (`docker_data.vhdx`) automatically grows as data is dumped. However, when you delete unused images or containers inside Docker, the host file does not shrink automatically. It is a common occurrence to see the `.vhdx` file bloated up to massive sizes like 130GB, even though the actual Docker usage is only a fraction of that.
+> Can also be used to clean up files for regular WSL distributions
 
-## Core Solution: Directly Compact the VHDX
+When running Docker Desktop with the WSL2 backend on Windows, due to the nature of dynamic VHD disks (`docker_data.vhdx`), the host machine's disk space is not automatically released even if we delete a large number of useless images and containers in Docker. Often, the actual container usage is only around 20 GB, but the host's `.vhdx` file can swell to 130 GB, or even fill up the C drive.
 
-The most effective way to reclaim your host machine disk space is to use the Windows `diskpart` tool to manually compact the bloated virtual disk file. Simply running `docker system prune` is not enough to shrink the container file on the host side.
+## Core Solution: Directly Compress the VHDX
 
-### 1. Clean up unused Docker data
+The most fundamental way to solve this problem is to shut down first, and then use Windows' `diskpart` tool to manually compress the bloated virtual disk file. Simply running `docker system prune` is not enough; you must actually compress the VHD file back.
 
-Before compacting the disk, it's highly recommended to clean up any unwanted images, containers, and build caches to maximize the space savings:
+### 1. Clean Up Internal Docker Junk (Optional)
+
+Before compressing the disk, it's best to completely discard unnecessary images and zombie containers to free up space inside the container:
 
 ```bash
-# Check space usage
+# View space usage
 docker system df
 
-# Remove all dangling resources, stopped containers, and unused volumes
+# Clean up all dangling resources, stopped containers, and unused cache volumes
 docker system prune -a --volumes
 ```
 
-### 2. Shut down WSL
+### 2. Shut Down WSL
 
-Fully exit Docker Desktop. To safely release the VHDX file from its mounted state, run the following in an **Administrator PowerShell**:
+After cleaning up, exit Docker Desktop completely. To detach the WSL VHDX from its mounted state, run the following in an **Administrator PowerShell**:
 
 ```powershell
 wsl --shutdown
 ```
 
-### 3. Compact with Diskpart
+### 3. Compress the Disk
 
-While still in your Administrator PowerShell, open `diskpart` and run the following commands sequentially (replace the file path with your actual setup if different):
+Continue by typing `diskpart` in the Administrator PowerShell to enter the interactive interface, then execute the following commands in order (replace with the actual path of your local `.vhdx`):
 
 ```powershell
-# Select the path to your vhdx file
+# Select your vhdx file
 select vdisk file="C:\Users\mioyi\AppData\Local\Docker\wsl\disk\docker_data.vhdx"
 
-# Attach as read-only
+# Mount in read-only mode
 attach vdisk readonly
 
-# Compact the virtual disk (This is the core action and might take some time)
+# Compress the virtual disk (core operation, this step may take some time)
 compact vdisk
 
-# Detach and exit
+# Detach and exit diskpart
 detach vdisk
 exit
 ```
 
-Once completed, the massive `.vhdx` file size will dramatically decrease, matching your actual internal Docker filesystem usage again! You can now restart Docker Desktop and resume your work.
+After execution, you will find that the size of the `.vhdx` file has significantly decreased, close to the actual upper-layer read/write usage of your current Docker system. You can then reopen Docker Desktop and use it normally.
+
+### Appendix: One-Click Cleanup Script
+
+Usage: `.\Compact-Vhdx.ps1 C:\Users\mioyi\AppData\Local\Docker\wsl\disk\docker_data.vhdx`
+
+```powershell {filename="Compact-Vhdx.ps1"}
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory = $true, Position = 0)]
+    [ValidateNotNullOrEmpty()]
+    [string]$VhdxPath
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+function Test-IsAdministrator {
+    $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = [Security.Principal.WindowsPrincipal]::new($identity)
+    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+try {
+    $ResolvedVhdxPath = (Resolve-Path -LiteralPath $VhdxPath).ProviderPath
+} catch {
+    Write-Error "VHDX file not found: $VhdxPath"
+    exit 1
+}
+
+if (-not (Test-IsAdministrator)) {
+    if (-not $PSCommandPath) {
+        Write-Error 'This script must be saved as a .ps1 file before it can self-elevate.'
+        exit 1
+    }
+
+    $powerShellExe = (Get-Process -Id $PID).Path
+    $arguments = @(
+        '-NoProfile'
+        '-ExecutionPolicy'
+        'Bypass'
+        '-File'
+        "`"$PSCommandPath`""
+        '-VhdxPath'
+        "`"$ResolvedVhdxPath`""
+    )
+
+    $process = Start-Process -FilePath $powerShellExe -ArgumentList $arguments -Verb RunAs -Wait -PassThru
+    exit $process.ExitCode
+}
+
+$diskpartScript = [IO.Path]::GetTempFileName()
+
+try {
+    $commands = @(
+        "select vdisk file=`"$ResolvedVhdxPath`""
+        'attach vdisk readonly'
+        'compact vdisk'
+        'detach vdisk'
+        'exit'
+    )
+
+    Set-Content -LiteralPath $diskpartScript -Value $commands -Encoding ASCII
+
+    Write-Host "Running diskpart compact for: $ResolvedVhdxPath"
+    & diskpart.exe /s $diskpartScript
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "diskpart failed with exit code $LASTEXITCODE."
+    }
+} finally {
+    if (Test-Path -LiteralPath $diskpartScript) {
+        Remove-Item -LiteralPath $diskpartScript -Force
+    }
+}
+```
