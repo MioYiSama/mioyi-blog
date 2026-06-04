@@ -57,17 +57,16 @@ tags: [杂项]
   "restore_on_startup": "launchpad",
 
   // Appearance
-  "buffer_font_family": "SF Mono",
+  "ui_font_size": 20.0,
   "buffer_font_size": 18.0,
-  "ui_font_family": "SF Pro",
-  "ui_font_size": 16.0,
   "theme": {
-    "light": "Github Light",
-    "dark": "Github Dark"
+    "mode": "dark",
+    "light": "One Light",
+    "dark": "Catppuccin Mocha"
   },
   "icon_theme": {
     "mode": "system",
-    "light": "Catppuccin Latte",
+    "light": "Catppuccin Mocha",
     "dark": "Catppuccin Mocha"
   },
   "tabs": {
@@ -75,59 +74,21 @@ tags: [杂项]
     "file_icons": true,
     "close_position": "left"
   },
-
-  // Editor
-  "diagnostics": {
-    "inline": {
-      "enabled": true
-    }
+  "agent": {
+    "sidebar_side": "right",
+    "dock": "right"
   },
-  "sticky_scroll": {
-    "enabled": true
+  "project_panel": {
+    "dock": "left"
   },
-  "hover_popover_delay": 100,
-  "minimap": {
-    "show": "auto"
-  },
-  "colorize_brackets": true,
-  "toolbar": {
-    "code_actions": false,
-    "quick_actions": false
-  },
-  "preview_tabs": {
-    "enable_preview_from_project_panel": false,
-    "enable_preview_multibuffer_from_code_navigation": true,
-    "enable_keep_preview_on_code_navigation": true
-  },
-  "tab_bar": {
-    "show_tab_bar_buttons": false,
-    "show_nav_history_buttons": false
-  },
-  "title_bar": {
-    "show_sign_in": false,
-    "show_user_menu": false,
-    "show_menus": false,
-    "show_branch_name": false
+  "outline_panel": {
+    "dock": "left"
   },
   "git_panel": {
-    "tree_view": true
-  },
-  "terminal": {
-    "cursor_shape": "bar"
-  },
-
-  // Language
-  "prettier": {
-    "allowed": true
-  },
-  "languages": {
-    "Python": {
-      "language_servers": ["ty", "!basedpyright", "..."]
-    }
+    "dock": "left"
   },
 
   // Debloat
-  "disable_ai": true,
   "collaboration_panel": {
     "button": false
   },
@@ -137,6 +98,308 @@ tags: [杂项]
   "telemetry": {
     "diagnostics": false,
     "metrics": false
-  }
+  },
+  "edit_predictions": {
+    "mode": "subtle"
+  },
+
+  // Specific Settings
+  "languages": {
+    "Go": {
+      "language_servers": ["gopls", "golangci-lint"]
+    },
+    "Python": {
+      "language_servers": ["ty", "ruff"]
+    },
+    "Kotlin": {
+      "language_servers": ["kotlin-lsp"]
+    },
+    "CSS": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "GraphQL": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "Handlebars": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "HTML": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "JavaScript": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        },
+        {
+          "code_action": "source.fixAll.oxc"
+        }
+      ]
+    },
+    "JSON": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "JSON5": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "JSONC": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "Less": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "Markdown": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "MDX": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "SCSS": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "TypeScript": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "TSX": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "Vue.js": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    },
+    "YAML": {
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": false
+      },
+      "formatter": [
+        {
+          "language_server": {
+            "name": "oxfmt"
+          }
+        }
+      ]
+    }
+  },
+  "lsp": {
+    "golangci-lint": {
+      "initialization_options": {
+        "command": [
+          "golangci-lint",
+          "run",
+          "--output.json.path",
+          "stdout",
+          "--show-stats=false",
+          "--output.text.path="
+        ]
+      }
+    },
+    "oxlint": {
+      "initialization_options": {
+        "settings": {
+          "configPath": null,
+          "run": "onType",
+          "disableNestedConfig": false,
+          "fixKind": "safe_fix",
+          "unusedDisableDirectives": "deny"
+        }
+      }
+    },
+    "oxfmt": {
+      "initialization_options": {
+        "settings": {
+          "fmt.configPath": null,
+          "run": "onSave"
+        }
+      }
+    },
+    "tinymist": {
+      "initialization_options": {
+        // Enable background preview
+        // Server will be running on 127.0.0.1:23635
+        "preview": {
+          "background": {
+            "enabled": true
+          }
+        }
+      },
+      "settings": {
+        "exportPdf": "onSave",
+        "outputPath": "$root/$name"
+      }
+    }
+  },
+  "agent_servers": {
+    "opencode": {
+      "type": "registry",
+      "favorite_config_option_values": {
+        "model": [
+          "opencode-go/deepseek-v4-pro",
+          "opencode-go/kimi-k2.6",
+          "opencode-go/glm-5.1",
+          "opencode-go/qwen3.7-max"
+        ]
+      },
+      "default_config_options": {
+        "model": "opencode-go/kimi-k2.6"
+      }
+    }
+  },
+  "ssh_connections": [
+    {
+      "host": "mioyi",
+      "args": [],
+      "projects": [
+        {
+          "paths": ["/root/docker"]
+        }
+      ]
+    }
+  ]
 }
 ```
