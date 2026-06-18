@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
   update-hugo:
@@ -39,28 +38,18 @@ jobs:
             echo "Hugo update available: $current -> $latest"
           fi
 
-      - name: Bump .hugo-version
+      - name: Bump .hugo-version and commit
         if: steps.versions.outputs.changed == 'true'
         shell: bash
         env:
           LATEST: ${{ steps.versions.outputs.latest }}
         run: |
           set -euo pipefail
+
           printf '%s\n' "$LATEST" > .hugo-version
 
-      - name: Create pull request
-        if: steps.versions.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v7
-        with:
-          commit-message: "ci: bump Hugo to ${{ steps.versions.outputs.latest }}"
-          title: "ci: bump Hugo to ${{ steps.versions.outputs.latest }}"
-          body: |
-            Automated update of the Hugo version used in the deploy workflow.
-
-            - Current: `${{ steps.versions.outputs.current }}`
-            - Latest: `${{ steps.versions.outputs.latest }}`
-
-            Release notes: https://github.com/gohugoio/hugo/releases/tag/v${{ steps.versions.outputs.latest }}
-          branch: ci/update-hugo
-          delete-branch: true
-          labels: dependencies
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .hugo-version
+          git commit -m "ci: bump Hugo to ${LATEST}"
+          git push
