@@ -9,11 +9,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: "0.163.1"
       HUGO_CACHEDIR: /tmp/hugo_cache_runner
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Read Hugo version
+        run: echo "HUGO_VERSION=$(cat .hugo-version)" >> "$GITHUB_ENV"
 
       - name: Disable git quotePath
         run: git config core.quotePath false

@@ -25,9 +25,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          WORKFLOW=".github/workflows/deploy.yml"
-
-          current="$(grep -oP 'HUGO_VERSION:\s*"\K[^"]+' "$WORKFLOW")"
+          current="$(cat .hugo-version)"
           latest="$(gh api repos/gohugoio/hugo/releases/latest --jq '.tag_name' | sed 's/^v//')"
 
           echo "current=$current" >> "$GITHUB_OUTPUT"
@@ -41,14 +39,14 @@ jobs:
             echo "Hugo update available: $current -> $latest"
           fi
 
-      - name: Bump HUGO_VERSION
+      - name: Bump .hugo-version
         if: steps.versions.outputs.changed == 'true'
         shell: bash
         env:
           LATEST: ${{ steps.versions.outputs.latest }}
         run: |
           set -euo pipefail
-          sed -i -E "s/(HUGO_VERSION:\s*\")[^\"]+(\")/\1${LATEST}\2/" .github/workflows/deploy.yml
+          printf '%s\n' "$LATEST" > .hugo-version
 
       - name: Create pull request
         if: steps.versions.outputs.changed == 'true'
