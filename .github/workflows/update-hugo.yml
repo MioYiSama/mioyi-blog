@@ -1,0 +1,68 @@
+name: Update Hugo version
+
+on:
+  schedule:
+    # 每周一 03:00 UTC 检查一次
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-hugo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Resolve versions
+        id: versions
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          WORKFLOW=".github/workflows/deploy.yml"
+
+          current="$(grep -oP 'HUGO_VERSION:\s*"\K[^"]+' "$WORKFLOW")"
+          latest="$(gh api repos/gohugoio/hugo/releases/latest --jq '.tag_name' | sed 's/^v//')"
+
+          echo "current=$current" >> "$GITHUB_OUTPUT"
+          echo "latest=$latest"   >> "$GITHUB_OUTPUT"
+
+          if [ "$current" = "$latest" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Hugo is already up to date ($current)."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Hugo update available: $current -> $latest"
+          fi
+
+      - name: Bump HUGO_VERSION
+        if: steps.versions.outputs.changed == 'true'
+        shell: bash
+        env:
+          LATEST: ${{ steps.versions.outputs.latest }}
+        run: |
+          set -euo pipefail
+          sed -i -E "s/(HUGO_VERSION:\s*\")[^\"]+(\")/\1${LATEST}\2/" .github/workflows/deploy.yml
+
+      - name: Create pull request
+        if: steps.versions.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "ci: bump Hugo to ${{ steps.versions.outputs.latest }}"
+          title: "ci: bump Hugo to ${{ steps.versions.outputs.latest }}"
+          body: |
+            Automated update of the Hugo version used in the deploy workflow.
+
+            - Current: `${{ steps.versions.outputs.current }}`
+            - Latest: `${{ steps.versions.outputs.latest }}`
+
+            Release notes: https://github.com/gohugoio/hugo/releases/tag/v${{ steps.versions.outputs.latest }}
+          branch: ci/update-hugo
+          delete-branch: true
+          labels: dependencies
